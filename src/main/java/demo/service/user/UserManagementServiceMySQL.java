@@ -24,10 +24,13 @@ public class UserManagementServiceMySQL implements UserManagementService {
     @Override
     public Notification<Boolean> updateUser(String username, String password, List<String> roles) {
         User user = userRepository.findByUsername(username);
-        user.setRoles(roles.stream().map(rightsRolesRepository::findByRole).collect(Collectors.toList()));
-        boolean passwordChanged = !user.getPassword().equals(password);
-        if (passwordChanged){
-            user.setPassword(password);
+        boolean passwordChanged = false;
+        if (user!=null) {
+            user.setRoles(roles.stream().map(rightsRolesRepository::findByRole).collect(Collectors.toList()));
+            passwordChanged = (password != null) && (password.trim().length() > 0) && (!user.getPassword().equals(password));
+            if (passwordChanged) {
+                user.setPassword(password);
+            }
         }
         UserValidator userValidator = new UserValidator(user);
         boolean userValid;

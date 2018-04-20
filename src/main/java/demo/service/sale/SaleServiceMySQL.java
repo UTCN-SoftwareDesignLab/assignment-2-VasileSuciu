@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
+import java.util.Optional;
 
 @Service
 public class SaleServiceMySQL implements SaleService {
@@ -20,8 +21,12 @@ public class SaleServiceMySQL implements SaleService {
     private SaleRepository saleRepository;
 
     @Override
-    public Notification<Boolean> makeSale(String title, int quantity) {
-        Book book = bookRepository.findByTitle(title);
+    public Notification<Boolean> makeSale(Long id, int quantity) {
+        Optional<Book> bookOptional = bookRepository.findById(id);
+        Book book = null;
+        if (bookOptional!=null){
+            book = bookOptional.get();
+        }
         Sale sale= new SaleBuilder()
                 .setBook(book)
                 .setQuantity(quantity)
@@ -32,6 +37,8 @@ public class SaleServiceMySQL implements SaleService {
         Notification<Boolean> notification = new Notification<Boolean>();
         if (saleValid){
             saleRepository.save(sale);
+            book.setStock(book.getStock()-quantity);
+            bookRepository.save(book);
             notification.setResult(Boolean.TRUE);
         }
         else {

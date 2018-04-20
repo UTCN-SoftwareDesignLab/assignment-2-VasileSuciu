@@ -22,10 +22,16 @@ public class BookValidator {
     }
 
     public boolean validate(){
-        validateTitle(book.getTitle());
-        validateAuthor(book.getAuthor());
-        validateGenre(book.getGenre());
-        validateStock(book.getStock());
+        if (book!=null) {
+            validateTitle(book.getTitle());
+            validateAuthor(book.getAuthor());
+            validateGenre(book.getGenre());
+            validateStock(book.getStock());
+            validatePrice(book.getPrice());
+        }
+        else{
+            errors.add("No such book!");
+        }
         return  errors.isEmpty();
     }
 
@@ -43,7 +49,7 @@ public class BookValidator {
     }
 
     private void validateGenre(String genre){
-        if (!Arrays.stream(Constants.Genres.GENRES).anyMatch(s->s.toLowerCase().equals(genre.toLowerCase()))){
+        if (genre==null || !Arrays.stream(Constants.Genres.GENRES).anyMatch(s->s.toLowerCase().equals(genre.toLowerCase()))){
             errors.add("Invalid genre!");
         }
     }
@@ -51,6 +57,12 @@ public class BookValidator {
     private void validateStock(int stock){
         if (stock < 0) {
             errors.add("The stock cannot be negative!");
+        }
+    }
+
+    private void validatePrice(double price){
+        if (price < 0) {
+            errors.add("The price cannot be negative!");
         }
     }
 }

@@ -29,39 +29,59 @@ public class UserValidator {
     }
 
     public boolean validate() {
-        validateUsername(user.getUsername());
-        validatePassword(user.getPassword());
-        validateRoles(user.getRoles());
+        if (user!=null) {
+            validateUsername(user.getUsername());
+            validatePassword(user.getPassword());
+            validateRoles(user.getRoles());
+        }
+        else {
+            errors.add("No such user!");
+        }
         return errors.isEmpty();
     }
 
     public boolean validateExceptPassword() {
-        validateUsername(user.getUsername());
-        validateRoles(user.getRoles());
+        if (user!=null) {
+            validateUsername(user.getUsername());
+            validateRoles(user.getRoles());
+        }
+        else {
+            errors.add("No such user!");
+        }
         return errors.isEmpty();
     }
 
 
     private void validateUsername(String username) {
-        if (!Pattern.compile(EMAIL_VALIDATION_REGEX).matcher(username).matches()) {
-            errors.add("Invalid email!");
+        if (username == null){
+            errors.add("Username should not be empty");
+        }
+        else {
+            if (!Pattern.compile(EMAIL_VALIDATION_REGEX).matcher(username).matches()) {
+                errors.add("Invalid email!");
+            }
         }
     }
 
     private void validatePassword(String password) {
-        if (password.length() < MIN_PASSWORD_LENGTH) {
-            errors.add("Password too short!");
+        if (password == null) {
+            errors.add("Password should not be empty");
         }
-        if (!containsSpecialCharacter(password)) {
-            errors.add("Password must contain at least one special character!");
-        }
-        if (!containsDigit(password)) {
-            errors.add("Password must contain at least one number!");
-        }
+        else {
+            if (password.length() < MIN_PASSWORD_LENGTH) {
+                errors.add("Password too short!");
+            }
+            if (!containsSpecialCharacter(password)) {
+                errors.add("Password must contain at least one special character!");
+            }
+            if (!containsDigit(password)) {
+                errors.add("Password must contain at least one number!");
+            }
+         }
     }
 
     private void validateRoles(List<Role> roles){
-        if (roles.isEmpty()){
+        if (roles == null || roles.isEmpty()){
             errors.add("Each user should have at least one role!");
         }
     }

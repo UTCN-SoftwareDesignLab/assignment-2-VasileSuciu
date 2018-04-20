@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class BookServiceMySQL  implements BookService{
@@ -17,12 +18,13 @@ public class BookServiceMySQL  implements BookService{
     private BookRepository bookRepository;
 
     @Override
-    public Notification<Boolean> addBook(String title, String author, String genre, int stock) {
+    public Notification<Boolean> addBook(String title, String author, String genre, int stock, double price) {
         Book book = new BookBuilder()
                 .setTitle(title)
                 .setAuthor(author)
                 .setGenre(genre)
                 .setStock(stock)
+                .setPrice(price)
                 .build();
         BookValidator bookValidator = new BookValidator(book);
         boolean bookValid = bookValidator.validate();
@@ -39,11 +41,27 @@ public class BookServiceMySQL  implements BookService{
     }
 
     @Override
-    public Notification<Boolean> updateBook(String title, String author, String genre, int stock) {
-        Book book = bookRepository.findByTitle(title);
-        book.setAuthor(author);
-        book.setGenre(genre);
-        book.setStock(stock);
+    public Notification<Boolean> updateBook(Long id, String title, String author, String genre, int stock, double price) {
+        Optional<Book> optionalBook = bookRepository.findById(id);
+        Book book= null;
+        if (optionalBook!= null){
+            book = optionalBook.get();
+        }
+        if (book!=null) {
+            if (title != null && title.length() > 0) {
+                book.setTitle(title);
+            }
+            if (author != null && author.length() > 0) {
+                book.setAuthor(author);
+            }
+            if (genre != null && genre.length() > 0) {
+                book.setGenre(genre);
+            }
+            if (price >= 0) {
+                book.setPrice(price);
+            }
+            book.setStock(stock);
+        }
         BookValidator bookValidator = new BookValidator(book);
         boolean bookValid = bookValidator.validate();
         Notification<Boolean> notification = new Notification<Boolean>();
@@ -59,8 +77,12 @@ public class BookServiceMySQL  implements BookService{
     }
 
     @Override
-    public boolean deleteBook(String title) {
-        Book book = bookRepository.findByTitle(title);
+    public boolean deleteBook(Long id) {
+        Book book = null;
+        Optional<Book> bookOptional = bookRepository.findById(id);
+        if (bookOptional != null) {
+            book= bookOptional.get();
+        }
         if (book != null) {
             bookRepository.delete(book);
             return true;
@@ -87,5 +109,20 @@ public class BookServiceMySQL  implements BookService{
             books.addAll(bookRepository.findAllByStock(i));
         }
         return books;
+    }
+
+    @Override
+    public List<Book> searchForBooks(String title, String author, String genre) {
+        if (title==null){
+            title = "";
+        }
+        if (author==null){
+            author = "";
+        }
+        if (genre==null){
+            genre = "";
+        }
+        return bookRepository.findAllByTitleOrAuthorOrGenre(title,author,genre);
+
     }
 }

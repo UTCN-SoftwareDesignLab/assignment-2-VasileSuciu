@@ -5,6 +5,7 @@ import demo.model.Sale;
 import org.springframework.beans.factory.annotation.Autowired;
 import demo.repository.book.BookRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class SaleValidator {
@@ -16,6 +17,7 @@ public class SaleValidator {
 
     public SaleValidator(Sale sale) {
         this.sale=sale;
+        errors = new ArrayList<String>();
     }
 
     public List<String> getErrors() {

@@ -15,6 +15,7 @@ public class Book {
     private String author;
     private String genre;
     private int stock;
+    private double price;
 
     public Book(){
 
@@ -58,5 +59,13 @@ public class Book {
 
     public void setStock(int stock) {
         this.stock = stock;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
     }
 }

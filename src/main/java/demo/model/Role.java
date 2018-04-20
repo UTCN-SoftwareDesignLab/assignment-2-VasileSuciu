@@ -52,4 +52,9 @@ public class Role {
         this.rights = rights;
     }
 
+    @Override
+    public String toString(){
+        return this.role;
+    }
+
 }

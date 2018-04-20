@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.security.MessageDigest;
 import java.util.Collections;
+import java.util.List;
 
 
 @Service
@@ -74,17 +75,18 @@ public class AuthenticationServiceMySQL implements AuthenticationService {
         }
     }
 
-    public void doStuff(){
-        System.out.println("Example");
-    }
-
     @Override
     public Notification<User> login(String username, String password) throws AuthenticationException {
-        User user = userRepository.findByUsernameAndPassword(username, encodePassword(password));
         Notification<User> notification = new Notification<>();
-        if (user != null) {
-            notification.setResult(user);
-        } else {
+        if (password!=null && username !=null) {
+            User user = userRepository.findByUsernameAndPassword(username, encodePassword(password));
+            if (user != null) {
+                notification.setResult(user);
+            } else {
+                notification.addError("Invalid username or password!");
+            }
+        }
+        else {
             notification.addError("Invalid username or password!");
         }
         return notification;

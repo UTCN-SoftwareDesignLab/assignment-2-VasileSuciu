@@ -4,6 +4,6 @@ import demo.model.validation.Notification;
 
 public interface SaleService {
 
-    Notification<Boolean> makeSale(String title, int quantity);
+    Notification<Boolean> makeSale(Long id, int quantity);
 
 }

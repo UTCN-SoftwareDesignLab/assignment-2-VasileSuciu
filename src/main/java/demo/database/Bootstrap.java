@@ -27,27 +27,16 @@ public class Bootstrap implements InitializingBean{
     @Autowired
     private  BookRepository bookRepository;
     @Autowired
-    private  SaleRepository saleRepositoryl;
-
-    /*
-    public static void main(String[] args) {
-        bootstrapRights();
-        bootstrapRoles();
-        bootstrapUsers();
-        bootstrapBooks();
-        bootstrapSales();
-    }
-    */
-
+    private  SaleRepository saleRepository;
 
     @Override
     @Transactional()
     public void afterPropertiesSet() throws Exception {
-        bootstrapRights();
-        bootstrapRoles();
-        bootstrapUsers();
-        bootstrapBooks();
-        bootstrapSales();
+        //bootstrapRights();
+        //bootstrapRoles();
+        //bootstrapUsers();
+        //bootstrapBooks();
+        //bootstrapSales();
     }
 
     private  void bootstrapRights(){

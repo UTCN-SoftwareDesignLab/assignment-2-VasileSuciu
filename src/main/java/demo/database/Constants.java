@@ -6,6 +6,7 @@ import static demo.database.Constants.Rights.*;
 import static demo.database.Constants.Roles.*;
 
 public class Constants {
+    public static int LOW_STOCK = 4;
 
     public static class Schemas {
         public static final String TEST = "test_book";
