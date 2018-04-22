@@ -9,6 +9,9 @@
 <form th:action="@{/employee}" method="GET">
     <button name="logoutBtn"  type="submit" class="btn btn-success">LogOut</button>
 </form>
+<form th:action="@{/employee}" method="GET">
+    <button name="googleSearchBtn"  type="submit" class="btn btn-success">Search with Google</button>
+</form>
 <div>
     <span style="color:#FF0000;" th:text="${errorMessage3}"></span>
 </div>
@@ -18,12 +21,12 @@
     </form>
 </div>
 <form th:action="@{/employee}" th:object="${book}" method="POST">
-    <div>ID  <input name="id" th:field="*{id}"  type="number"  value=0/></div>
+    <div>ID  <input name="id" th:field="${bookID.value}"  type="number"  value="0" /></div>
     <div>Title  <input name="user" th:field="*{title}"  type="text" /></div>
     <div>Author  <input name="pass" th:field="*{author}"  type="text" /></div>
     <div>Genre  <input name="role" th:field="*{genre}"  type="text" /></div>
-    <div>Price  <input name="price" th:field="*{price}"  type="number" value=0/></div>
-    <div>Quantity  <input name="role" th:field="*{stock}"  type="number" value=0/></div>
+    <div>Price  <input name="price" th:field="*{price}"  type="number" value="0.0"/></div>
+    <div>Quantity  <input name="role" th:field="*{stock}"  type="number" value="0"/></div>
     <div>
         <button name="createBtn"  type="submit" class="btn btn-success">Create</button>
         <button name="updateBtn"  type="submit" class="btn btn-success">Update</button>

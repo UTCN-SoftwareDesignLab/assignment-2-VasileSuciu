@@ -43,25 +43,7 @@ public class BookServiceMySQL  implements BookService{
     @Override
     public Notification<Boolean> updateBook(Long id, String title, String author, String genre, int stock, double price) {
         Optional<Book> optionalBook = bookRepository.findById(id);
-        Book book= null;
-        if (optionalBook!= null){
-            book = optionalBook.get();
-        }
-        if (book!=null) {
-            if (title != null && title.length() > 0) {
-                book.setTitle(title);
-            }
-            if (author != null && author.length() > 0) {
-                book.setAuthor(author);
-            }
-            if (genre != null && genre.length() > 0) {
-                book.setGenre(genre);
-            }
-            if (price >= 0) {
-                book.setPrice(price);
-            }
-            book.setStock(stock);
-        }
+        Book book = validateOptionalBook(title, author, genre, stock, price, optionalBook);
         BookValidator bookValidator = new BookValidator(book);
         boolean bookValid = bookValidator.validate();
         Notification<Boolean> notification = new Notification<Boolean>();
@@ -74,6 +56,27 @@ public class BookServiceMySQL  implements BookService{
             notification.setResult(Boolean.TRUE);
         }
         return notification;
+    }
+
+    private Book validateOptionalBook(String title, String author, String genre, int stock, double price, Optional<Book> optionalBook) {
+        Book book= null;
+        if (optionalBook!= null && optionalBook.isPresent()){
+            book = optionalBook.get();
+        }
+        if (book!=null) {
+            if (title != null && title.length() > 0) {
+                book.setTitle(title);
+            }
+            if (author != null && author.length() > 0) {
+                book.setAuthor(author);
+            }
+            if (genre != null && genre.length() > 0) {
+                book.setGenre(genre);
+            }
+            book.setPrice(price);
+            book.setStock(stock);
+        }
+        return book;
     }
 
     @Override

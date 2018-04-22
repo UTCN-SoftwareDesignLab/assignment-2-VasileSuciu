@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Book API</title>
+</head>
+<body>
+<form th:action="@{/bookAPI}" method="GET">
+    <button name="logoutBtn"  type="submit" class="btn btn-success">LogOut</button>
+</form>
+<div>
+    <form th:action="@{/bookAPI}" method="GET">
+        <div>Title  <input name="title" th:object="${title}"  type="text" /></div>
+        <button name="searchTitleBtn"  type="submit" class="btn btn-success">Search by tittle</button>
+    </form>
+</div>
+
+<div>
+    <form th:action="@{/bookAPI}" method="GET">
+        <div>Author  <input name="author" th:object="${author}"  type="text" /></div>
+        <button name="searchAuthorBtn"  type="submit" class="btn btn-success">Search by author</button>
+    </form>
+</div>
+
+<div>
+    <form th:action="@{/bookAPI}" method="GET">
+        <div>Subject  <input name="subject" th:object="${subject}"  type="text" /></div>
+        <button name="searchSubjectBtn"  type="submit" class="btn btn-success">Search by subject</button>
+    </form>
+</div>
+
+<div>
+    <table>
+        <tr>
+            <td >Title</td>
+            <td>Author</td>
+            <td>Genre</td>
+            <td >Price</td>
+        </tr>
+        <tbody>
+        <tr th:each="book3 : ${ bookList }">
+            <td th:text="${ book3.title }">Title</td>
+            <td th:text="${ book3.author}">Author</td>
+            <td th:text="${ book3.genre }">Genre</td>
+            <td th:text="${ book3.price }">Price</td>
+        </tr>
+
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>

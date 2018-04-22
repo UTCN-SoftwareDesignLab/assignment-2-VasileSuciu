@@ -27,7 +27,7 @@ public class UserManagementServiceMySQL implements UserManagementService {
         boolean passwordChanged = false;
         if (user!=null) {
             user.setRoles(roles.stream().map(rightsRolesRepository::findByRole).collect(Collectors.toList()));
-            passwordChanged = (password != null) && (password.trim().length() > 0) && (!user.getPassword().equals(password));
+            passwordChanged = (password != null) && (password.trim().length() > 0);
             if (passwordChanged) {
                 user.setPassword(password);
             }
@@ -49,6 +49,7 @@ public class UserManagementServiceMySQL implements UserManagementService {
         }
         else {
             userNotification.setResult(Boolean.TRUE);
+            userRepository.save(user);
         }
         return userNotification;
     }

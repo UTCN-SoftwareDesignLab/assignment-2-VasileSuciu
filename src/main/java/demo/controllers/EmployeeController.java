@@ -1,8 +1,11 @@
 package demo.controllers;
 
+import demo.database.Constants;
 import demo.model.Book;
 import demo.model.validation.Notification;
 import demo.service.book.BookServiceMySQL;
+import demo.service.report.ReportGeneratorFactory;
+import demo.service.report.ReportGeneratorService;
 import demo.service.sale.SaleServiceMySQL;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,12 +23,17 @@ public class EmployeeController {
     private SaleServiceMySQL saleServiceMySQL;
     @Autowired
     private LoggedUser loggedUser;
+    @Autowired
+    private ReportGeneratorFactory reportGeneratorFactory;
+    @Autowired
+    private ReportGeneratorService reportGeneratorService;
 
     @RequestMapping(value = "/employee", method = RequestMethod.GET)
     public String showAdministratorPage(ModelMap model){
         if (loggedUser.isLogged()) {
             model.addAttribute("errorMessage3", "");
             model.addAttribute("book", new Book());
+            model.addAttribute("bookID", new MyLong());
             model.addAttribute("bookList", bookService.getAllBooks());
             return "employee";
         }
@@ -46,20 +54,20 @@ public class EmployeeController {
     }
 
     @RequestMapping(value = "/employee", params="updateBtn", method = RequestMethod.POST)
-    public String handleBookUpdate(ModelMap model,  @ModelAttribute("book") Book book) {
-        System.out.println(book.getTitle());
-        System.out.println(book.getAuthor());
-        System.out.println(book.getGenre());
-        System.out.println(book.getStock());
-        Notification<Boolean> notification =  bookService.updateBook(book.getId(), book.getTitle(),
-                book.getAuthor(), book.getGenre(), book.getStock(), book.getPrice());
-        if (notification.hasErrors()){
-            model.addAttribute("errorMessage3",notification.getFormattedErrors());
+    public String handleBookUpdate(ModelMap model,  @ModelAttribute("book") Book book, @ModelAttribute("bookID") MyLong id) {
+        if (id != null) {
+            Notification<Boolean> notification = bookService.updateBook(id.getValue(), book.getTitle(),
+                    book.getAuthor(), book.getGenre(), book.getStock(), book.getPrice());
+            if (notification.hasErrors()) {
+                model.addAttribute("errorMessage3", notification.getFormattedErrors());
+            } else {
+                model.addAttribute("errorMessage3", "");
+            }
+            model.addAttribute("bookList", bookService.getAllBooks());
         }
-        else{
-            model.addAttribute("errorMessage3", "");
+        else {
+            model.addAttribute("errorMessage3","ID cannot be null!");
         }
-        model.addAttribute("bookList", bookService.getAllBooks());
         return "employee";
     }
 
@@ -103,6 +111,34 @@ public class EmployeeController {
             return "redirect:administrator";
         }
         return "redirect:employee";
+    }
+
+    @RequestMapping(value = "/employee", params="pdfBtn", method = RequestMethod.POST)
+    public String handlePDFReportGeneration(ModelMap model) {
+        System.out.println("Entering PDF EmployeeController");
+        reportGeneratorService.setReportGenerator(reportGeneratorFactory
+                .getReportGenerator(Constants.Reports.PDF));
+        System.out.println("Done PDF EmployeeController");
+        reportGeneratorService.generateReport();
+        return "redirect:employee";
+    }
+
+    @RequestMapping(value = "/employee", params="csvBtn", method = RequestMethod.POST)
+    public String handleCSVReportGeneration(ModelMap model) {
+        System.out.println("Entering CSV EmployeeController");
+        reportGeneratorService.setReportGenerator(reportGeneratorFactory
+                .getReportGenerator(Constants.Reports.CSV));
+        reportGeneratorService.generateReport();
+        System.out.println("Done CSV EmployeeController");
+        return "redirect:employee";
+    }
+
+    @RequestMapping(value = "/employee", params="googleSearchBtn", method = RequestMethod.GET)
+    public String handleGoogleSearch(ModelMap model){
+        if (!loggedUser.isLogged()){
+            return "redirect:login";
+        }
+        return "redirect:bookAPI";
     }
 
 
