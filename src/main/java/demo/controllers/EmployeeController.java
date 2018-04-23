@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import java.util.List;
+
 
 @Controller
 public class EmployeeController {
@@ -33,7 +35,6 @@ public class EmployeeController {
         if (loggedUser.isLogged()) {
             model.addAttribute("errorMessage3", "");
             model.addAttribute("book", new Book());
-            model.addAttribute("bookID", new MyLong());
             model.addAttribute("bookList", bookService.getAllBooks());
             return "employee";
         }
@@ -54,20 +55,15 @@ public class EmployeeController {
     }
 
     @RequestMapping(value = "/employee", params="updateBtn", method = RequestMethod.POST)
-    public String handleBookUpdate(ModelMap model,  @ModelAttribute("book") Book book, @ModelAttribute("bookID") MyLong id) {
-        if (id != null) {
-            Notification<Boolean> notification = bookService.updateBook(id.getValue(), book.getTitle(),
-                    book.getAuthor(), book.getGenre(), book.getStock(), book.getPrice());
-            if (notification.hasErrors()) {
-                model.addAttribute("errorMessage3", notification.getFormattedErrors());
-            } else {
-                model.addAttribute("errorMessage3", "");
-            }
-            model.addAttribute("bookList", bookService.getAllBooks());
+    public String handleBookUpdate(ModelMap model,  @ModelAttribute("book") Book book) {
+        Notification<Boolean> notification = bookService.updateBook(book.getId(), book.getTitle(),
+            book.getAuthor(), book.getGenre(), book.getStock(), book.getPrice());
+        if (notification.hasErrors()) {
+            model.addAttribute("errorMessage3", notification.getFormattedErrors());
+        } else {
+             model.addAttribute("errorMessage3", "");
         }
-        else {
-            model.addAttribute("errorMessage3","ID cannot be null!");
-        }
+        model.addAttribute("bookList", bookService.getAllBooks());
         return "employee";
     }
 
@@ -100,8 +96,9 @@ public class EmployeeController {
 
     @RequestMapping(value = "/employee", params="searchBtn", method = RequestMethod.POST)
     public String handleBookSearch(ModelMap model,  @ModelAttribute("book") Book book) {
-        model.addAttribute("bookList", bookService.searchForBooks(book.getTitle(),
-                book.getAuthor(), book.getGenre()));
+        List<Book> books = bookService.searchForBooks(book.getTitle(),
+                book.getAuthor(), book.getGenre());
+        model.addAttribute("bookList", books);
         return "employee";
     }
 

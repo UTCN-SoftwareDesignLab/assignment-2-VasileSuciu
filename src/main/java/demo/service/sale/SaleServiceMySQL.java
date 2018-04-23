@@ -24,7 +24,7 @@ public class SaleServiceMySQL implements SaleService {
     public Notification<Boolean> makeSale(Long id, int quantity) {
         Optional<Book> bookOptional = bookRepository.findById(id);
         Book book = null;
-        if (bookOptional!=null){
+        if (bookOptional!=null && bookOptional.isPresent()){
             book = bookOptional.get();
         }
         Sale sale= new SaleBuilder()

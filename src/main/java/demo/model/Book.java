@@ -18,7 +18,12 @@ public class Book {
     private double price;
 
     public Book(){
-
+        id = 0L;
+        author = "";
+        title = "";
+        genre = "";
+        stock = 0;
+        price = 0;
     }
 
     public Long getId() {

@@ -83,7 +83,7 @@ public class BookServiceMySQL  implements BookService{
     public boolean deleteBook(Long id) {
         Book book = null;
         Optional<Book> bookOptional = bookRepository.findById(id);
-        if (bookOptional != null) {
+        if (bookOptional != null && bookOptional.isPresent()) {
             book= bookOptional.get();
         }
         if (book != null) {
@@ -125,7 +125,7 @@ public class BookServiceMySQL  implements BookService{
         if (genre==null){
             genre = "";
         }
-        return bookRepository.findAllByTitleOrAuthorOrGenre(title,author,genre);
+        return bookRepository.findAllByQuery(title);
 
     }
 }

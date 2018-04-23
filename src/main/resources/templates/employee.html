@@ -21,7 +21,7 @@
     </form>
 </div>
 <form th:action="@{/employee}" th:object="${book}" method="POST">
-    <div>ID  <input name="id" th:field="${bookID.value}"  type="number"  value="0" /></div>
+    <div>ID  <input name="id" th:field="*{id}"  type="number"  value="0" /></div>
     <div>Title  <input name="user" th:field="*{title}"  type="text" /></div>
     <div>Author  <input name="pass" th:field="*{author}"  type="text" /></div>
     <div>Genre  <input name="role" th:field="*{genre}"  type="text" /></div>
