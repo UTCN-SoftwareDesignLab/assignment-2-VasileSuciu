@@ -54,15 +54,25 @@ public class BookValidator {
         }
     }
 
-    private void validateStock(int stock){
-        if (stock < 0) {
-            errors.add("The stock cannot be negative!");
+    private void validateStock(Integer stock){
+        if (stock == null){
+            errors.add("Stock cannot be null");
+        }
+        else {
+            if (stock < 0) {
+                errors.add("The stock cannot be negative!");
+            }
         }
     }
 
-    private void validatePrice(double price){
-        if (price < 0) {
-            errors.add("The price cannot be negative!");
+    private void validatePrice(Double price){
+        if (price == null){
+            errors.add("Price cannot be null");
+        }
+        else {
+            if (price < 0) {
+                errors.add("The price cannot be negative!");
+            }
         }
     }
 }

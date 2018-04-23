@@ -12,7 +12,7 @@ public class Sale {
     @ManyToOne
     @JoinColumn(name = "book_id")
     private Book book;
-    private int quantity;
+    private Integer quantity;
     private Date date;
 
     public Sale(){
@@ -35,11 +35,11 @@ public class Sale {
         this.book = book;
     }
 
-    public int getQuantity() {
+    public Integer getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(int quantity) {
+    public void setQuantity(Integer quantity) {
         this.quantity = quantity;
     }
 

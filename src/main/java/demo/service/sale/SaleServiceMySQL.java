@@ -21,8 +21,11 @@ public class SaleServiceMySQL implements SaleService {
     private SaleRepository saleRepository;
 
     @Override
-    public Notification<Boolean> makeSale(Long id, int quantity) {
-        Optional<Book> bookOptional = bookRepository.findById(id);
+    public Notification<Boolean> makeSale(Long id, Integer quantity) {
+        Optional<Book> bookOptional = null;
+        if (id !=null){
+            bookOptional = bookRepository.findById(id);
+        }
         Book book = null;
         if (bookOptional!=null && bookOptional.isPresent()){
             book = bookOptional.get();

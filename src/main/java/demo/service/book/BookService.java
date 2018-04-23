@@ -7,9 +7,9 @@ import java.util.List;
 
 public interface BookService {
 
-    Notification<Boolean> addBook(String title, String author, String genre, int stock, double price);
+    Notification<Boolean> addBook(String title, String author, String genre, Integer stock, Double price);
 
-    Notification<Boolean> updateBook(Long id, String title, String author, String genre, int stock, double price);
+    Notification<Boolean> updateBook(Long id, String title, String author, String genre, Integer stock, Double price);
 
     boolean deleteBook(Long id);
 

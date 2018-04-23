@@ -56,21 +56,29 @@ public class EmployeeController {
 
     @RequestMapping(value = "/employee", params="updateBtn", method = RequestMethod.POST)
     public String handleBookUpdate(ModelMap model,  @ModelAttribute("book") Book book) {
-        Notification<Boolean> notification = bookService.updateBook(book.getId(), book.getTitle(),
-            book.getAuthor(), book.getGenre(), book.getStock(), book.getPrice());
-        if (notification.hasErrors()) {
-            model.addAttribute("errorMessage3", notification.getFormattedErrors());
-        } else {
-             model.addAttribute("errorMessage3", "");
+        if (book.getId() != null) {
+            Notification<Boolean> notification = bookService.updateBook(book.getId(), book.getTitle(),
+                    book.getAuthor(), book.getGenre(), book.getStock(), book.getPrice());
+            if (notification.hasErrors()) {
+                model.addAttribute("errorMessage3", notification.getFormattedErrors());
+            } else {
+                model.addAttribute("errorMessage3", "");
+            }
+            model.addAttribute("bookList", bookService.getAllBooks());
         }
-        model.addAttribute("bookList", bookService.getAllBooks());
+        else {
+            model.addAttribute("bookList", bookService.getAllBooks());
+            model.addAttribute("errorMessage3","ID must not be null");
+        }
         return "employee";
     }
 
     @RequestMapping(value = "/employee", params="createBtn", method = RequestMethod.POST)
     public String handleBookCreate(ModelMap model,  @ModelAttribute("book") Book book) {
+        System.out.println("entered book create");
         Notification<Boolean> notification =  bookService.addBook(book.getTitle(),
                 book.getAuthor(), book.getGenre(), book.getStock(), book.getPrice());
+        System.out.println("before if");
         if (notification.hasErrors()){
             model.addAttribute("errorMessage3",notification.getFormattedErrors());
         }

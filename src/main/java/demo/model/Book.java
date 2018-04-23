@@ -14,8 +14,8 @@ public class Book {
     private String title;
     private String author;
     private String genre;
-    private int stock;
-    private double price;
+    private Integer stock;
+    private Double price;
 
     public Book(){
         id = 0L;
@@ -23,7 +23,7 @@ public class Book {
         title = "";
         genre = "";
         stock = 0;
-        price = 0;
+        price = 0.0;
     }
 
     public Long getId() {
@@ -58,19 +58,19 @@ public class Book {
         this.genre = genre;
     }
 
-    public int getStock() {
+    public Integer getStock() {
         return stock;
     }
 
-    public void setStock(int stock) {
+    public void setStock(Integer stock) {
         this.stock = stock;
     }
 
-    public double getPrice() {
+    public Double getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(Double price) {
         this.price = price;
     }
 }

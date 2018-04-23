@@ -27,7 +27,7 @@ public class SaleBuilder {
         return  this;
     }
 
-    public SaleBuilder setQuantity(int quantity){
+    public SaleBuilder setQuantity(Integer quantity){
         sale.setQuantity(quantity);
         return this;
     }

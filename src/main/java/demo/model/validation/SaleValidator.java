@@ -30,8 +30,13 @@ public class SaleValidator {
             errors.add("Book not available!");
         }
         else {
-            if (book.getStock() < sale.getQuantity()){
-                errors.add("Not enough copies available!");
+            if (sale.getQuantity() == null){
+                errors.add("Quantity cannot be null");
+            }
+            else {
+                if (book.getStock() < sale.getQuantity()) {
+                    errors.add("Not enough copies available!");
+                }
             }
         }
         return errors.isEmpty();
