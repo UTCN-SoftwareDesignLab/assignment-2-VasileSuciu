@@ -15,8 +15,7 @@ public class ReportGeneratorCSV implements ReportGenerator {
 
     @Override
     public void generateReport(List<Book> books) {
-        String fileName = "CSVReport" + new Date().toString() + ".csv";
-        fileName ="CSVreport.csv";
+        String fileName  ="CSVreport.csv";
         try {
             File file = new File(fileName);
             if (!file.isFile()){

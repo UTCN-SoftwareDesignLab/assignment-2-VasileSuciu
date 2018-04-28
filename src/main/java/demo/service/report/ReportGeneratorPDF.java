@@ -18,8 +18,7 @@ public class ReportGeneratorPDF implements ReportGenerator{
 
     @Override
     public void generateReport(List<Book> books) {
-        String fileName = "PDFReport-"+new Date().toString()+ ".pdf";
-        fileName = "PDFreport.pdf";
+        String fileName ="PDFreport.pdf";
         try {
             PDDocument document = new PDDocument();
             PDPage page = new PDPage();
