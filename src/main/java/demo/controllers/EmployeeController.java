@@ -49,6 +49,9 @@ public class EmployeeController {
 
     @RequestMapping(value = "/employee", params="deleteBtn", method = RequestMethod.POST)
     public String handleBookDelete(ModelMap model,  @ModelAttribute("book") Book book) {
+        if (!loggedUser.isLogged()){
+            return "redirect:login";
+        }
         bookService.deleteBook(book.getId());
         model.addAttribute("bookList", bookService.getAllBooks());
         return "employee";
@@ -56,6 +59,9 @@ public class EmployeeController {
 
     @RequestMapping(value = "/employee", params="updateBtn", method = RequestMethod.POST)
     public String handleBookUpdate(ModelMap model,  @ModelAttribute("book") Book book) {
+        if (!loggedUser.isLogged()){
+            return "redirect:login";
+        }
         if (book.getId() != null) {
             Notification<Boolean> notification = bookService.updateBook(book.getId(), book.getTitle(),
                     book.getAuthor(), book.getGenre(), book.getStock(), book.getPrice());
@@ -75,10 +81,11 @@ public class EmployeeController {
 
     @RequestMapping(value = "/employee", params="createBtn", method = RequestMethod.POST)
     public String handleBookCreate(ModelMap model,  @ModelAttribute("book") Book book) {
-        System.out.println("entered book create");
+        if (!loggedUser.isLogged()){
+            return "redirect:login";
+        }
         Notification<Boolean> notification =  bookService.addBook(book.getTitle(),
                 book.getAuthor(), book.getGenre(), book.getStock(), book.getPrice());
-        System.out.println("before if");
         if (notification.hasErrors()){
             model.addAttribute("errorMessage3",notification.getFormattedErrors());
         }
@@ -91,6 +98,9 @@ public class EmployeeController {
 
     @RequestMapping(value = "/employee", params="sellBtn", method = RequestMethod.POST)
     public String handleBookSale(ModelMap model,  @ModelAttribute("book") Book book) {
+        if (!loggedUser.isLogged()){
+            return "redirect:login";
+        }
         Notification<Boolean> notification =  saleServiceMySQL.makeSale(book.getId(),book.getStock());
         if (notification.hasErrors()){
             model.addAttribute("errorMessage3",notification.getFormattedErrors());
@@ -104,14 +114,19 @@ public class EmployeeController {
 
     @RequestMapping(value = "/employee", params="searchBtn", method = RequestMethod.POST)
     public String handleBookSearch(ModelMap model,  @ModelAttribute("book") Book book) {
-        List<Book> books = bookService.searchForBooks(book.getTitle(),
-                book.getAuthor(), book.getGenre());
+        if (!loggedUser.isLogged()){
+            return "redirect:login";
+        }
+        List<Book> books = bookService.searchForBooks(book.getTitle());
         model.addAttribute("bookList", books);
         return "employee";
     }
 
     @RequestMapping(value = "/employee", params="switchBtn", method = RequestMethod.GET)
     public String handleSwitchView(ModelMap model) {
+        if (!loggedUser.isLogged()){
+            return "redirect:login";
+        }
         if (loggedUser.isAdministrator()){
             return "redirect:administrator";
         }
@@ -120,21 +135,23 @@ public class EmployeeController {
 
     @RequestMapping(value = "/employee", params="pdfBtn", method = RequestMethod.POST)
     public String handlePDFReportGeneration(ModelMap model) {
-        System.out.println("Entering PDF EmployeeController");
+        if (!loggedUser.isLogged()){
+            return "redirect:login";
+        }
         reportGeneratorService.setReportGenerator(reportGeneratorFactory
                 .getReportGenerator(Constants.Reports.PDF));
-        System.out.println("Done PDF EmployeeController");
         reportGeneratorService.generateReport();
         return "redirect:employee";
     }
 
     @RequestMapping(value = "/employee", params="csvBtn", method = RequestMethod.POST)
     public String handleCSVReportGeneration(ModelMap model) {
-        System.out.println("Entering CSV EmployeeController");
+        if (!loggedUser.isLogged()){
+            return "redirect:login";
+        }
         reportGeneratorService.setReportGenerator(reportGeneratorFactory
                 .getReportGenerator(Constants.Reports.CSV));
         reportGeneratorService.generateReport();
-        System.out.println("Done CSV EmployeeController");
         return "redirect:employee";
     }
 

@@ -5,9 +5,11 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
+import org.apache.pdfbox.pdmodel.font.encoding.WinAnsiEncoding;
 
 import java.util.Date;
 import java.util.List;
+import static java.nio.charset.StandardCharsets.*;
 
 public class ReportGeneratorPDF implements ReportGenerator{
 
@@ -17,13 +19,13 @@ public class ReportGeneratorPDF implements ReportGenerator{
     @Override
     public void generateReport(List<Book> books) {
         String fileName = "PDFReport-"+new Date().toString()+ ".pdf";
-        fileName = "report2.pdf";
+        fileName = "PDFreport.pdf";
         try {
             PDDocument document = new PDDocument();
             PDPage page = new PDPage();
             PDPageContentStream contentStream = new PDPageContentStream(document, page);
             contentStream.beginText();
-            contentStream.setFont( PDType1Font.TIMES_ROMAN, 16 );
+            contentStream.setFont( PDType1Font.TIMES_ROMAN, 12 );
             contentStream.setLeading(14.5f);
             contentStream.newLineAtOffset(25,725);
             int currentRow = 0;
@@ -41,7 +43,10 @@ public class ReportGeneratorPDF implements ReportGenerator{
                             book.getGenre() + ", " +
                             book.getPrice() + ", " +
                             book.getStock();
-                    contentStream.showText(text);
+                    byte[] ptext = text.getBytes(ISO_8859_1);
+                    String value = new String(ptext, "Windows-1252");
+                    contentStream.showText(value);
+                    contentStream.newLine();
                     currentBook++;
                     currentRow++;
                 }

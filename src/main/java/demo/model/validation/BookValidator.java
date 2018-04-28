@@ -49,9 +49,16 @@ public class BookValidator {
     }
 
     private void validateGenre(String genre){
-        if (genre==null || !Arrays.stream(Constants.Genres.GENRES).anyMatch(s->s.toLowerCase().equals(genre.toLowerCase()))){
-            errors.add("Invalid genre!");
+        if (genre == null){
+            errors.add("Genre cannot be null!");
         }
+        else {
+            if (genre.length()<1)
+            errors.add("Genre cannot be empty!");
+        }
+        //if (genre==null || !Arrays.stream(Constants.Genres.GENRES).anyMatch(s->s.toLowerCase().equals(genre.toLowerCase()))){
+        //    errors.add("Invalid genre!");
+        //}
     }
 
     private void validateStock(Integer stock){

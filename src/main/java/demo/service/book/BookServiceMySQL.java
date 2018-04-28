@@ -120,15 +120,9 @@ public class BookServiceMySQL  implements BookService{
     }
 
     @Override
-    public List<Book> searchForBooks(String title, String author, String genre) {
+    public List<Book> searchForBooks(String title) {
         if (title==null){
             title = "";
-        }
-        if (author==null){
-            author = "";
-        }
-        if (genre==null){
-            genre = "";
         }
         return bookRepository.findAllByQuery(title);
 

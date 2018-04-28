@@ -9,6 +9,12 @@
 <form th:action="@{/bookAPI}" method="GET">
     <button name="logoutBtn"  type="submit" class="btn btn-success">LogOut</button>
 </form>
+<form th:action="@{/bookAPI}" method="GET">
+    <button name="backBtn"  type="submit" class="btn btn-success">Bck to view</button>
+</form>
+<div>
+    <span style="color:#FF0000;" th:text="${errorMessage3}"></span>
+</div>
 <div>
     <form th:action="@{/bookAPI}" method="GET">
         <div>Title  <input name="title" th:object="${title}"  type="text" /></div>
@@ -31,23 +37,30 @@
 </div>
 
 <div>
-    <table>
-        <tr>
-            <td >Title</td>
-            <td>Author</td>
-            <td>Genre</td>
-            <td >Price</td>
-        </tr>
-        <tbody>
-        <tr th:each="book3 : ${ bookList }">
-            <td th:text="${ book3.title }">Title</td>
-            <td th:text="${ book3.author}">Author</td>
-            <td th:text="${ book3.genre }">Genre</td>
-            <td th:text="${ book3.price }">Price</td>
-        </tr>
+    <form th:action="@{/bookAPI}" method="POST">
+        <div>ID <input name="id" th:object="${id}"  type="number" /></div>
+        <button name="addToDatabaseBtn"  type="submit" class="btn btn-success">Add to database</button>
+        <table>
+            <tr>
+                <td >ID</td>
+                <td >Title</td>
+                <td>Author</td>
+                <td>Genre</td>
+                <td >Price</td>
+            </tr>
+            <tbody>
+            <tr th:each="book3 : ${ bookList }">
+                <td th:text="${ book3.id }">ID</td>
+                <td th:text="${ book3.title }">Title</td>
+                <td th:text="${ book3.author}">Author</td>
+                <td th:text="${ book3.genre }">Genre</td>
+                <td th:text="${ book3.price }">Price</td>
+            </tr>
 
-        </tbody>
-    </table>
+            </tbody>
+        </table>
+
+    </form>
 </div>
 
 </body>

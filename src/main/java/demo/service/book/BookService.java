@@ -19,5 +19,5 @@ public interface BookService {
 
     List<Book> getBooksWithStockLessThan(int stock);
 
-    List<Book> searchForBooks(String title, String author, String genre);
+    List<Book> searchForBooks(String title);
 }

@@ -97,16 +97,18 @@ public class GoogleBooks{
                 Volume.SaleInfo saleInfo = volumeList.get(i).getSaleInfo();
                 if (volumeInfo.getTitle() != null) {
                     book.setTitle(volumeInfo.getTitle());
+                } else {
+                    book.setTitle("Unknown");
                 }
                 if (volumeInfo.getAuthors() != null && !volumeInfo.getAuthors().isEmpty()) {
                     book.setAuthor(volumeInfo.getAuthors().get(0));
                 } else {
-                    book.setAuthor("");
+                    book.setAuthor("Unknown");
                 }
                 if (volumeInfo.getCategories() != null && !volumeInfo.getCategories().isEmpty()) {
                     book.setGenre(volumeInfo.getCategories().get(0));
                 } else {
-                    book.setGenre("");
+                    book.setGenre("Unknown");
                 }
                 if (saleInfo != null && saleInfo.getListPrice() !=null){
                     book.setPrice(saleInfo.getListPrice().getAmount());
@@ -115,7 +117,7 @@ public class GoogleBooks{
                     book.setPrice(0.0);
                 }
                 book.setStock(0);
-                book.setId(0L);
+                book.setId(i+1L);
                 bookList.add(book);
             }
         }

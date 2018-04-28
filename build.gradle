@@ -52,4 +52,9 @@ dependencies {
     //Google books API
     compile 'com.google.apis:google-api-services-books:v1-rev95-1.23.0'
 
+	// https://mvnrepository.com/artifact/org.mockito/mockito-core
+	testCompile group: 'org.mockito', name: 'mockito-core', version: '2.1.0'
+
+
+
 }

@@ -20,14 +20,11 @@ public class ReportGeneratorService{
 
     public void setReportGenerator(ReportGenerator reportGenerator) {
         this.reportGenerator = reportGenerator;
-        System.out.println("hello from report generator set generator");
     }
 
     public void generateReport() {
 
-        System.out.println("hello from report generator report");
         if (this.reportGenerator != null) {
-            System.out.println("hello from report generator service");
             List<Book> books = bookServiceMySQL.getBooksWithStockLessThan(Constants.LOW_STOCK);
             reportGenerator.generateReport(books);
         }

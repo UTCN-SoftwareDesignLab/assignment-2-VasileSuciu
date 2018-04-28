@@ -27,7 +27,7 @@ public class AdministratorController {
 
     @RequestMapping(value = "/administrator", method = RequestMethod.GET)
     public String showAdministratorPage(ModelMap model){
-        if (loggedUser.isLogged()) {
+        if (loggedUser.isLogged() && loggedUser.isAdministrator()) {
             List<User> userList = userManagementServiceMySQL.getAllUsers();
             model.addAttribute("userList", userList);
             model.addAttribute("userDTO", new UserDTO());
@@ -45,6 +45,9 @@ public class AdministratorController {
 
     @RequestMapping(value = "/administrator", params="deleteBtn", method = RequestMethod.POST)
     public String handleUserDelete(ModelMap model,  @ModelAttribute("userDTO") UserDTO userDTO) {
+        if (!loggedUser.isLogged()){
+            return "redirect:login";
+        }
         userManagementServiceMySQL.deleteUser(userDTO.getUsername());
 
         model.addAttribute("userList",userManagementServiceMySQL.getAllUsers());
@@ -53,6 +56,9 @@ public class AdministratorController {
 
     @RequestMapping(value = "/administrator", params="updateBtn", method = RequestMethod.POST)
     public String handleUserUpdate(ModelMap model,  @ModelAttribute("userDTO") UserDTO userDTO) {
+        if (!loggedUser.isLogged()){
+            return "redirect:login";
+        }
         Notification<Boolean> notification =  userManagementServiceMySQL.updateUser(userDTO.getUsername(),
                 userDTO.getPassword(),
                 userDTO.getRoleList());
@@ -68,6 +74,9 @@ public class AdministratorController {
 
     @RequestMapping(value = "/administrator", params="createBtn", method = RequestMethod.POST)
     public String handleUserCreate(ModelMap model, @ModelAttribute("userDTO") UserDTO userDTO){
+        if (!loggedUser.isLogged()){
+            return "redirect:login";
+        }
         Notification<Boolean> notification = authenticationServiceMySQL.register(userDTO.getUsername(),
                 userDTO.getPassword());
         if (notification.getResult()){
@@ -82,6 +91,9 @@ public class AdministratorController {
 
     @RequestMapping(value = "/administrator", params="switchBtn", method = RequestMethod.GET)
     public String handleSwitchView(ModelMap model){
+        if (!loggedUser.isLogged()){
+            return "redirect:login";
+        }
         return "redirect:/employee";
     }
 }

@@ -18,7 +18,7 @@ public class UserManagementServiceMySQL implements UserManagementService {
     @Autowired
     private UserRepository userRepository;
     @Autowired
-    private RoleRepository rightsRolesRepository;
+    private RoleRepository roleRepository;
 
 
     @Override
@@ -26,7 +26,7 @@ public class UserManagementServiceMySQL implements UserManagementService {
         User user = userRepository.findByUsername(username);
         boolean passwordChanged = false;
         if (user!=null) {
-            user.setRoles(roles.stream().map(rightsRolesRepository::findByRole).collect(Collectors.toList()));
+            user.setRoles(roles.stream().map(roleRepository::findByRole).collect(Collectors.toList()));
             passwordChanged = (password != null) && (password.trim().length() > 0);
             if (passwordChanged) {
                 user.setPassword(password);
