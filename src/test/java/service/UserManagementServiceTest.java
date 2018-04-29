@@ -42,7 +42,7 @@ public class UserManagementServiceTest {
     public void updateUserTest(){
         when(userRepository.findByUsername(user.getUsername())).thenReturn(user);
         Assert.assertFalse(userManagementServiceMySQL.updateUser(user.getUsername(),user.getPassword(),
-                Arrays.asList(Constants.Roles.ROLES)).hasErrors());
+                Constants.Roles.ADMINISTRATOR).hasErrors());
     }
 
     @Test
