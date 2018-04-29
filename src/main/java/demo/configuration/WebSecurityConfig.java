@@ -27,6 +27,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private AuthSuccessHandler authSuccessHandler;
 
     @Autowired
+    private AccessDeniedHandler accessDeniedHandler;
+
+    @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception
     {
         auth
@@ -45,8 +48,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .disable()
                 .authorizeRequests()
                 .antMatchers("/login").permitAll()
+                .antMatchers("/accessDenied").permitAll()
+                .antMatchers("/employee/**","/bookAPI/**").hasRole("employee")
                 .antMatchers("/**").hasRole("administrator")
-                .antMatchers("/employee/**","/booksAPI/**").hasRole("employee")
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
@@ -56,7 +60,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll()
                 .and()
                 .logout()
-                .permitAll();
+                .permitAll()
+                .and()
+                .exceptionHandling()
+                .accessDeniedHandler(accessDeniedHandler);
     }
     @Override
     public void configure(WebSecurity webSecurity) throws Exception
