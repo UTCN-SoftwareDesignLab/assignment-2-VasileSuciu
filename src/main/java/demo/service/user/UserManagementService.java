@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface UserManagementService {
 
-    Notification<Boolean> updateUser(String username, String password, List<String> roles);
+    Notification<Boolean> updateUser(String username, String password, String roles);
 
     boolean deleteUser(String user);
 

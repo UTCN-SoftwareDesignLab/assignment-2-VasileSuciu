@@ -1,9 +1,6 @@
 package demo.model.builder;
 
-import demo.model.Role;
 import demo.model.User;
-
-import java.util.List;
 
 public class UserBuilder {
     private User user;
@@ -22,7 +19,7 @@ public class UserBuilder {
         return this;
     }
 
-    public UserBuilder setRoles(List<Role> roles) {
+    public UserBuilder setRoles(String roles) {
         user.setRoles(roles);
         return this;
     }

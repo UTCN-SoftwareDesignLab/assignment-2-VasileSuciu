@@ -1,6 +1,5 @@
 package demo.model.validation;
 
-import demo.model.Role;
 import demo.model.User;
 
 import java.util.ArrayList;
@@ -80,7 +79,7 @@ public class UserValidator {
          }
     }
 
-    private void validateRoles(List<Role> roles){
+    private void validateRoles(String roles){
         if (roles == null || roles.isEmpty()){
             errors.add("Each user should have at least one role!");
         }

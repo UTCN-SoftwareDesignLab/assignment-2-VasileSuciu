@@ -24,34 +24,20 @@ public class EmployeeController {
     @Autowired
     private SaleServiceMySQL saleServiceMySQL;
     @Autowired
-    private LoggedUser loggedUser;
-    @Autowired
     private ReportGeneratorFactory reportGeneratorFactory;
     @Autowired
     private ReportGeneratorService reportGeneratorService;
 
     @RequestMapping(value = "/employee", method = RequestMethod.GET)
     public String showAdministratorPage(ModelMap model){
-        if (loggedUser.isLogged()) {
             model.addAttribute("errorMessage3", "");
             model.addAttribute("book", new Book());
             model.addAttribute("bookList", bookService.getAllBooks());
             return "employee";
-        }
-        return "redirect:login";
-    }
-
-    @RequestMapping(value = "/employee", params="logoutBtn", method = RequestMethod.GET)
-    public String handleLogOut(ModelMap model){
-        loggedUser.logOut();
-        return "redirect:login";
     }
 
     @RequestMapping(value = "/employee", params="deleteBtn", method = RequestMethod.POST)
     public String handleBookDelete(ModelMap model,  @ModelAttribute("book") Book book) {
-        if (!loggedUser.isLogged()){
-            return "redirect:login";
-        }
         bookService.deleteBook(book.getId());
         model.addAttribute("bookList", bookService.getAllBooks());
         return "employee";
@@ -59,9 +45,6 @@ public class EmployeeController {
 
     @RequestMapping(value = "/employee", params="updateBtn", method = RequestMethod.POST)
     public String handleBookUpdate(ModelMap model,  @ModelAttribute("book") Book book) {
-        if (!loggedUser.isLogged()){
-            return "redirect:login";
-        }
         if (book.getId() != null) {
             Notification<Boolean> notification = bookService.updateBook(book.getId(), book.getTitle(),
                     book.getAuthor(), book.getGenre(), book.getStock(), book.getPrice());
@@ -81,9 +64,6 @@ public class EmployeeController {
 
     @RequestMapping(value = "/employee", params="createBtn", method = RequestMethod.POST)
     public String handleBookCreate(ModelMap model,  @ModelAttribute("book") Book book) {
-        if (!loggedUser.isLogged()){
-            return "redirect:login";
-        }
         Notification<Boolean> notification =  bookService.addBook(book.getTitle(),
                 book.getAuthor(), book.getGenre(), book.getStock(), book.getPrice());
         if (notification.hasErrors()){
@@ -98,9 +78,6 @@ public class EmployeeController {
 
     @RequestMapping(value = "/employee", params="sellBtn", method = RequestMethod.POST)
     public String handleBookSale(ModelMap model,  @ModelAttribute("book") Book book) {
-        if (!loggedUser.isLogged()){
-            return "redirect:login";
-        }
         Notification<Boolean> notification =  saleServiceMySQL.makeSale(book.getId(),book.getStock());
         if (notification.hasErrors()){
             model.addAttribute("errorMessage3",notification.getFormattedErrors());
@@ -114,9 +91,6 @@ public class EmployeeController {
 
     @RequestMapping(value = "/employee", params="searchBtn", method = RequestMethod.POST)
     public String handleBookSearch(ModelMap model,  @ModelAttribute("book") Book book) {
-        if (!loggedUser.isLogged()){
-            return "redirect:login";
-        }
         List<Book> books = bookService.searchForBooks(book.getTitle());
         model.addAttribute("bookList", books);
         return "employee";
@@ -124,20 +98,11 @@ public class EmployeeController {
 
     @RequestMapping(value = "/employee", params="switchBtn", method = RequestMethod.GET)
     public String handleSwitchView(ModelMap model) {
-        if (!loggedUser.isLogged()){
-            return "redirect:login";
-        }
-        if (loggedUser.isAdministrator()){
-            return "redirect:administrator";
-        }
-        return "redirect:employee";
+        return "redirect:administrator";
     }
 
     @RequestMapping(value = "/employee", params="pdfBtn", method = RequestMethod.POST)
     public String handlePDFReportGeneration(ModelMap model) {
-        if (!loggedUser.isLogged()){
-            return "redirect:login";
-        }
         reportGeneratorService.setReportGenerator(reportGeneratorFactory
                 .getReportGenerator(Constants.Reports.PDF));
         reportGeneratorService.generateReport();
@@ -146,9 +111,6 @@ public class EmployeeController {
 
     @RequestMapping(value = "/employee", params="csvBtn", method = RequestMethod.POST)
     public String handleCSVReportGeneration(ModelMap model) {
-        if (!loggedUser.isLogged()){
-            return "redirect:login";
-        }
         reportGeneratorService.setReportGenerator(reportGeneratorFactory
                 .getReportGenerator(Constants.Reports.CSV));
         reportGeneratorService.generateReport();
@@ -157,9 +119,6 @@ public class EmployeeController {
 
     @RequestMapping(value = "/employee", params="googleSearchBtn", method = RequestMethod.GET)
     public String handleGoogleSearch(ModelMap model){
-        if (!loggedUser.isLogged()){
-            return "redirect:login";
-        }
         return "redirect:bookAPI";
     }
 

@@ -12,59 +12,25 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 
 @Controller
 public class LogInController {
 
     @Autowired
     private AuthenticationServiceMySQL authenticationServiceMySQL;
-    @Autowired
-    private LoggedUser loggedUser;
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
-    public String showLoginPage(ModelMap model) {
+    public String showLoginPage(HttpServletRequest request, ModelMap model) {
         model.addAttribute("user", new User());
-        model.addAttribute("errorMessage", "");
-        return "login";
-    }
-
-    @RequestMapping(value = "/login", params="loginBtn", method = RequestMethod.POST)
-    public String handleUserLogin(ModelMap model, @ModelAttribute("user") User user) {
-        Notification<User> notification = null;
-        try {
-            notification= authenticationServiceMySQL.login(user.getUsername(), user.getPassword());
-            if (notification.hasErrors()){
-                model.put("errorMessage", notification.getFormattedErrors());
-                return "login";
-            }
-            loggedUser.setUser(notification.getResult());
-
+        HttpSession session = request.getSession(true);
+        String error = "";
+        if (session.getAttribute("errorMessage")!=null){
+            error = (String)session.getAttribute("errorMessage");
         }
-        catch(Exception e){
-            e.printStackTrace();
-        }
-        if (notification !=null && loggedUser.isAdministrator()){
-            return "redirect:/administrator";
-        }
-        return "redirect:/employee";
-    }
-
-    @RequestMapping(value = "/login", params="registerBtn", method = RequestMethod.POST)
-    public String handleUserRegistration(ModelMap model, @ModelAttribute("user") User user) {
-        try {
-            Notification<Boolean> notification = authenticationServiceMySQL.register(user.getUsername(), user.getPassword());
-            if (notification.hasErrors()){
-                model.addAttribute("errorMessage",notification.getFormattedErrors());
-            }
-            else {
-                model.addAttribute("errorMessage","Registration successful!");
-            }
-            return "login";
-
-        }
-        catch(Exception e){
-            e.printStackTrace();
-        }
+        model.addAttribute("errorMessage", error);
         return "login";
     }
 

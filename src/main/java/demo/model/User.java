@@ -11,9 +11,7 @@ public class User {
     private Long id;
     private String username;
     private String password;
-    @ManyToMany
-    @JoinColumn(name = "role_id")
-    private List<Role> roles;
+    private String roles;
 
     public User(){
 
@@ -43,11 +41,11 @@ public class User {
         this.password = password;
     }
 
-    public List<Role> getRoles() {
+    public String getRoles() {
         return roles;
     }
 
-    public void setRoles(List<Role> roles) {
+    public void setRoles(String roles) {
         this.roles = roles;
     }
 

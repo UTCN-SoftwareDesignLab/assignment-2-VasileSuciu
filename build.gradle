@@ -55,6 +55,10 @@ dependencies {
 	// https://mvnrepository.com/artifact/org.mockito/mockito-core
 	testCompile group: 'org.mockito', name: 'mockito-core', version: '2.1.0'
 
+	testCompile('org.springframework.security:spring-security-test')
 
+	compile('org.springframework.boot:spring-boot-starter-security')
+	// https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-thymeleaf
+	compile group: 'org.springframework.boot', name: 'spring-boot-starter-thymeleaf', version: '2.0.1.RELEASE'
 
 }

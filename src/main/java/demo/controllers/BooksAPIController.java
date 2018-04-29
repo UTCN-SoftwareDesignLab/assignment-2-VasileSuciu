@@ -24,12 +24,9 @@ public class BooksAPIController {
     private GoogleBooks googleBooks;
     @Autowired
     private BookServiceMySQL bookServiceMySQL;
-    @Autowired
-    private LoggedUser loggedUser;
 
     @RequestMapping(value = "/bookAPI", method = RequestMethod.GET)
     public String showAdministratorPage(ModelMap model){
-        if (loggedUser.isLogged()) {
             model.addAttribute("title", "");
             model.addAttribute("author", "");
             model.addAttribute("subject", "");
@@ -37,15 +34,10 @@ public class BooksAPIController {
             model.addAttribute("id",0);
             model.addAttribute("errorMessage3","");
             return "bookAPI";
-        }
-        return "redirect:login";
     }
 
     @RequestMapping(value = "/bookAPI", params="addToDatabaseBtn", method = RequestMethod.POST)
     public String handleDatabaseUpdate(HttpServletRequest request, ModelMap model, @ModelAttribute("id") Integer id){
-        if (!loggedUser.isLogged()){
-            return  "redirect:login";
-        }
         HttpSession session = request.getSession(true);
         List<Book> bookList = (List<Book>)session.getAttribute("bookList");
         if (id == null){
@@ -73,9 +65,6 @@ public class BooksAPIController {
 
     @RequestMapping(value = "/bookAPI", params="searchTitleBtn", method = RequestMethod.GET)
     public String handleTitleSearch(HttpServletRequest request, ModelMap model, @ModelAttribute("title") String title){
-        if (!loggedUser.isLogged()){
-            return  "redirect:login";
-        }
 
         HttpSession session = request.getSession(true);
         List<Book> bookList =googleBooks.getBooksByTitle(title);
@@ -86,9 +75,6 @@ public class BooksAPIController {
 
     @RequestMapping(value = "/bookAPI", params="searchAuthorBtn", method = RequestMethod.GET)
     public String handleAuthorSearch(HttpServletRequest request, ModelMap model, @ModelAttribute("author") String author){
-        if (!loggedUser.isLogged()){
-           return  "redirect:login";
-        }
 
         HttpSession session = request.getSession(true);
         List<Book> bookList = googleBooks.getBooksByAuthor(author);
@@ -99,9 +85,7 @@ public class BooksAPIController {
 
     @RequestMapping(value = "/bookAPI", params="searchSubjectBtn", method = RequestMethod.GET)
     public String handleSubjectSearch(HttpServletRequest request, ModelMap model, @ModelAttribute("subject") String subject){
-        if (!loggedUser.isLogged()){
-           return  "redirect:login";
-        }
+
 
         HttpSession session = request.getSession(true);
         List<Book> bookList= googleBooks.getBooksBySubject(subject);
@@ -112,15 +96,7 @@ public class BooksAPIController {
 
     @RequestMapping(value = "/bookAPI", params="backBtn", method = RequestMethod.GET)
     public String handleBackBtn(ModelMap model){
-        if (!loggedUser.isLogged()){
-            return  "redirect:login";
-        }
         return "redirect:/employee";
     }
 
-    @RequestMapping(value = "/bookAPI", params="logoutBtn", method = RequestMethod.GET)
-    public String handleLogOut(ModelMap model){
-        loggedUser.logOut();
-        return "redirect:login";
-    }
 }

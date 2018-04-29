@@ -1,32 +1,36 @@
 package demo.service.user;
 
+import demo.database.Constants;
 import demo.model.User;
 import demo.model.validation.Notification;
 import demo.model.validation.UserValidator;
-import demo.repository.security.RoleRepository;
 import demo.repository.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.security.MessageDigest;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class UserManagementServiceMySQL implements UserManagementService {
     @Autowired
     private UserRepository userRepository;
+
     @Autowired
-    private RoleRepository roleRepository;
+    private PasswordEncoder passwordEncoder;
 
 
     @Override
-    public Notification<Boolean> updateUser(String username, String password, List<String> roles) {
+    public Notification<Boolean> updateUser(String username, String password, String roles) {
         User user = userRepository.findByUsername(username);
         boolean passwordChanged = false;
         if (user!=null) {
-            user.setRoles(roles.stream().map(roleRepository::findByRole).collect(Collectors.toList()));
+            if (roles!= null && roles.trim().length()>0) {
+                StringBuilder stringBuilder = new StringBuilder();
+                Arrays.stream(Constants.Roles.ROLES).filter(s->roles.toLowerCase().contains(s.toLowerCase())).forEach(s->stringBuilder.append(s+" "));
+                user.setRoles(stringBuilder.toString());
+            }
             passwordChanged = (password != null) && (password.trim().length() > 0);
             if (passwordChanged) {
                 user.setPassword(password);
@@ -39,7 +43,7 @@ public class UserManagementServiceMySQL implements UserManagementService {
         }
         else {
             userValid = userValidator.validateExceptPassword();
-        }
+            user.setPassword(passwordEncoder.encodePassword(password));        }
         Notification<Boolean> userNotification = new Notification<>();
 
         if (!userValid){
@@ -74,23 +78,5 @@ public class UserManagementServiceMySQL implements UserManagementService {
         List<User> users = new ArrayList<User>();
         userRepository.findAll().forEach(users::add);
         return users;
-    }
-
-    private String encodePassword(String password) {
-        try {
-            MessageDigest digest = MessageDigest.getInstance("SHA-256");
-            byte[] hash = digest.digest(password.getBytes("UTF-8"));
-            StringBuilder hexString = new StringBuilder();
-
-            for (int i = 0; i < hash.length; i++) {
-                String hex = Integer.toHexString(0xff & hash[i]);
-                if (hex.length() == 1) hexString.append('0');
-                hexString.append(hex);
-            }
-
-            return hexString.toString();
-        } catch (Exception ex) {
-            throw new RuntimeException(ex);
-        }
     }
 }
